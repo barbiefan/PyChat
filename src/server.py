@@ -1,14 +1,14 @@
 import socket
-import os
 from _thread import start_new_thread
 
 class Server():
 
-    def __init__(self, IP='127.0.0.1', PORT=5005, backlog=10):
+    def __init__(self, IP='127.0.0.1', PORT=5005, backlog=10, buffer_size=2048):
         self.IP = IP
         self.PORT = PORT
         self.backlog = backlog
-        self.Socket = socket.socket()
+        self.Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.BUFFER_SIZE = buffer_size
         try:
             self.Socket.bind((self.IP, self.PORT))
         except socket.error as err:
@@ -40,7 +40,7 @@ class Server():
         client_address = connection.getpeername()
         try:
             while True:
-                data = connection.recv(2048).decode('utf-8')
+                data = connection.recv(self.BUFFER_SIZE).decode('utf-8')
                 self.msg_log.append(data)
                 reply = f'server\'s log:\n{self.msg_log}'
                 if not data:
