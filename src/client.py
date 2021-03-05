@@ -1,7 +1,12 @@
 import socket
 from _thread import start_new_thread
+import proto
+import time
 
 class Client():
+
+    t1 = 0
+    t2 = 0
 
     def __init__(self, IP, PORT, buffer_size=2048):
         self.Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,6 +30,13 @@ class Client():
         try:
             while True:
                 data = self.Socket.recv(self.BUFFER_SIZE)
+                data = proto.proto_parse(data)
+                if data.startswith('PG'):
+                    self.t2 = time.perf_counter()
+                if self.t1 != 0 and self.t2 != 0:
+                    data = f'ping is: {self.t2-self.t1}, echo: {data}'
+                    self.t1 = 0
+                    self.t2 = 0
                 print(f'\n{str(data)}')
         except Exception as err:
             print('RECEIVING ERROR:')
@@ -40,7 +52,13 @@ class Client():
                 msg = input('you: ')
                 if msg == '!exit':
                     break
-                self.Socket.send(bytes(msg, 'utf-8'))
+                if not ':' in msg:
+                    msg = 'PG:'+msg 
+                msg = proto.proto_parse(msg)
+                if msg.startswith('PG'):
+                    self.t1 = time.perf_counter()
+
+                self.Socket.send(msg.encode('utf-8'))
         except Exception as err:
             print('SENDING ERROR:')
             print(str(err))
@@ -49,3 +67,4 @@ class Client():
             print('done.')
 
 cli = Client('127.0.0.1', 5005)
+time.sleep(10000)

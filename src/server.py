@@ -1,5 +1,6 @@
 import socket
 from _thread import start_new_thread
+import proto
 
 class Server():
 
@@ -40,11 +41,11 @@ class Server():
         client_address = connection.getpeername()
         try:
             while True:
-                data = connection.recv(self.BUFFER_SIZE).decode('utf-8')
-                self.msg_log.append(data)
-                reply = f'server\'s log:\n{self.msg_log}'
+                data = connection.recv(self.BUFFER_SIZE)
                 if not data:
                     break
+                reply = proto.proto_parse(data)
+                self.msg_log.append(data)
                 connection.sendall(str.encode(reply))
         except Exception as err:
             print(f'CLIENT CONNECTION ERROR ({client_address[0]}:{client_address[1]}):')
