@@ -17,7 +17,7 @@ class Server():
             print(str(err))
         else:
             print(f'Server initialized. IP:PORT - {self.IP}:{self.PORT}')
-        self.msg_log = []
+        self.msg_queue = []
 
 
     def listen(self, backlog=None):
@@ -29,7 +29,7 @@ class Server():
             while True:
                 Client, address = self.Socket.accept()
                 print(f'Connected to: {address[0]}:{address[1]}')
-                start_new_thread(self.client_thread, (Client, ))
+                self.client_thread(Client)
         except Exception as err:
             print('SERVER ERROR:')
             print(str(err))
@@ -38,22 +38,46 @@ class Server():
             print('done.')
 
     def client_thread(self, connection):
+        start_new_thread(self.client_listen, (connection, ))
+        start_new_thread(self.client_send, (connection, ))
+
+    def client_listen(self, connection):
         client_address = connection.getpeername()
         try:
             while True:
-                data = connection.recv(self.BUFFER_SIZE)
-                if not data:
+                msg = connection.recv(self.BUFFER_SIZE)
+                if not msg:
                     break
-                reply = proto.proto_parse(data)
-                self.msg_log.append(data)
-                connection.sendall(str.encode(reply))
+                parsed_msg = proto.proto_parse(msg)
+                self.msg_queue.append(parsed_msg)
         except Exception as err:
-            print(f'CLIENT CONNECTION ERROR ({client_address[0]}:{client_address[1]}):')
+            print(f'CLIENT LISTENING/RECEIVING ERROR ({client_address[0]}:{client_address[1]}):')
             print(str(err))
         finally:
             print(f'closing connection {client_address[0]}:{client_address[1]} ...')
             connection.close()
             print('done.')
+
+    def client_send(self, connection):
+        client_address = connection.getpeername()
+        cache_msg_queue = self.msg_queue.copy()
+        try:
+            while True:
+                if self.msg_queue > cache_msg_queue:
+                    diff = len(self.msg_queue)-len(cache_msg_queue)
+                    diff_to_send = self.msg_queue[-diff:]
+                    for message in diff_to_send:
+                        connection.sendall(message)
+                    cache_msg_queue = self.msg_queue.copy()
+
+        except Exception as err:
+            print(f'CLIENT SENDING ERROR ({client_address[0]}:{client_address[1]}):')
+            print(str(err))
+        finally:
+            print(f'closing connection {client_address[0]}:{client_address[1]} ...')
+            connection.close()
+            print('done.')
+
 
 serv = Server()
 serv.listen()

@@ -29,15 +29,17 @@ class Client():
         print('Started listening deamon')
         try:
             while True:
-                data = self.Socket.recv(self.BUFFER_SIZE)
-                data = proto.proto_parse(data)
+                msg = self.Socket.recv(self.BUFFER_SIZE)
+                parsed_msg = proto.proto_parse(msg)
+                """
                 if data.startswith('PG'):
                     self.t2 = time.perf_counter()
                 if self.t1 != 0 and self.t2 != 0:
                     data = f'ping is: {self.t2-self.t1}, echo: {data}'
                     self.t1 = 0
                     self.t2 = 0
-                print(f'\n{str(data)}')
+                """
+                print(f'\n{parsed_msg.decode("utf-8")}')
         except Exception as err:
             print('RECEIVING ERROR:')
             print(str(err))
@@ -52,13 +54,12 @@ class Client():
                 msg = input('you: ')
                 if msg == '!exit':
                     break
-                if not ':' in msg:
-                    msg = 'PG:'+msg 
-                msg = proto.proto_parse(msg)
+                parsed_msg = proto.proto_parse(msg)
+                """
                 if msg.startswith('PG'):
                     self.t1 = time.perf_counter()
-
-                self.Socket.send(msg.encode('utf-8'))
+                """
+                self.Socket.send(parsed_msg)
         except Exception as err:
             print('SENDING ERROR:')
             print(str(err))
