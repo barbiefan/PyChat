@@ -1,5 +1,5 @@
 
-def proto_parse(string: bytes):
+def proto_parse(string: bytes, is_received: bool = False):
     if not type(string) is str:
         string = string.decode('utf-8')
     try:
@@ -7,7 +7,7 @@ def proto_parse(string: bytes):
             code = 'MS'
         else:
             code, string = string.split(':')
-        responce = codes[code](string)
+        responce = codes[code](string, is_received)
     except KeyError as err:
         responce = str(err)
         code = 'ER'
@@ -15,31 +15,34 @@ def proto_parse(string: bytes):
         responce = str(err)
         code = 'ER'
 
-    packed_responce = proto_pack(responce, code).encode('utf-8')
+    packed_responce = proto_pack(responce, code, is_received).encode('utf-8')
     return(packed_responce)
 
-def proto_pack(responce: str, code: str):
+def proto_pack(responce: str, code: str, received: bool):
+    if received:
+        return(f'{responce}')
     return(f'{code}:{responce}')
+        
 
-def error(string: str):
+def error(string: str, received: bool = False):
     pass
 
-def heartbeat(string: str):
+def heartbeat(string: str, received: bool = False):
     pass
 
-def chatpool(string: str):
+def chatpool(string: str, received: bool = False):
     pass
 
-def update(string: str):
+def update(string: str, received: bool = False):
     pass
 
-def whisper(string: str):
+def whisper(string: str, received: bool = False):
     pass
 
-def message(string: str):
+def message(string: str, received: bool = False):
     return(string)
 
-def ping(string: str):
+def ping(string: str, received: bool = False):
     return(string)
 
 codes = {'HB': heartbeat,

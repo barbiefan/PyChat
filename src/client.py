@@ -5,9 +5,6 @@ import time
 
 class Client():
 
-    t1 = 0
-    t2 = 0
-
     def __init__(self, IP, PORT, buffer_size=2048):
         self.Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.BUFFER_SIZE = buffer_size
@@ -30,15 +27,7 @@ class Client():
         try:
             while True:
                 msg = self.Socket.recv(self.BUFFER_SIZE)
-                parsed_msg = proto.proto_parse(msg)
-                """
-                if data.startswith('PG'):
-                    self.t2 = time.perf_counter()
-                if self.t1 != 0 and self.t2 != 0:
-                    data = f'ping is: {self.t2-self.t1}, echo: {data}'
-                    self.t1 = 0
-                    self.t2 = 0
-                """
+                parsed_msg = proto.proto_parse(msg, True)
                 print(f'\n{parsed_msg.decode("utf-8")}')
         except Exception as err:
             print('RECEIVING ERROR:')
@@ -55,10 +44,6 @@ class Client():
                 if msg == '!exit':
                     break
                 parsed_msg = proto.proto_parse(msg)
-                """
-                if msg.startswith('PG'):
-                    self.t1 = time.perf_counter()
-                """
                 self.Socket.send(parsed_msg)
         except Exception as err:
             print('SENDING ERROR:')

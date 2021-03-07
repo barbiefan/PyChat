@@ -48,7 +48,7 @@ class Server():
                 msg = connection.recv(self.BUFFER_SIZE)
                 if not msg:
                     break
-                parsed_msg = proto.proto_parse(msg)
+                parsed_msg = proto.proto_parse(msg, True)
                 self.msg_queue.append(parsed_msg)
         except Exception as err:
             print(f'CLIENT LISTENING/RECEIVING ERROR ({client_address[0]}:{client_address[1]}):')
