@@ -3,18 +3,17 @@ import json
 import time
 
 test_string = '{"Sender": "Xxx_Pussy_destroyer_xxX", "DateTimeReceived": "08.03.2021 18:02:33", "PacketCode": "MS", "Content": "test message for parsing"}'
-json = json.loads(test_string)
-
 
 class Packet():
     def __init__(self, string: str):
-        self.sender = json["Sender"]
-        if json["DateTimeReceived"] == "":
-            self.datetime = str(time.time())
+        slovar = json.loads(test_string)
+        self.Sender = slovar["Sender"]
+        if slovar["DateTimeReceived"] == "":
+            self.DateTime = str(time.time())
         else:
-            self.datetime = json["DateTimeReceived"]
-        self.packetcode = json["PacketCode"]
-        self.content = json["Content"]
+            self.DateTime = slovar["DateTimeReceived"]
+        self.PacketCode = slovar["PacketCode"]
+        self.Content = slovar["Content"]
         
 
-packet = Packet(json)
+packet = Packet(test_string)
