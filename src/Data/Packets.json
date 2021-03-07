@@ -1,0 +1,16 @@
+{
+    "SHA256_hash_of_packet_used_as_it's_ID_816324615293465":
+    {
+        "Sender": "some_id_1",
+        "DateTimeReceived": "08.03.2021 18:02:33",
+        "PacketCode": "MS",
+        "Content": "ur mom gay"
+    },
+    "SHA256_hash_of_packet_used_as_it's_ID_871263948172639":
+    {
+        "Sender": "some_id_2",
+        "DateTimeReceived": "08.03.2021 18:01:15",
+        "PacketCode": "MS",
+        "Content": "no u"
+    }
+}

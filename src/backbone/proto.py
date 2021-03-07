@@ -42,6 +42,12 @@ def whisper(string: str, received: bool = False):
 def message(string: str, received: bool = False):
     return(string)
 
+def user_login(string: str, received: bool = False):
+    pass
+
+def user_logout(string: str, received: bool = False):
+    pass
+
 def ping(string: str, received: bool = False):
     return(string)
 
@@ -51,4 +57,6 @@ codes = {'HB': heartbeat,
          'PM': whisper,
          'MS': message,
          'PG': ping,
+         'LI': user_login,
+         'LO': user_logout,
          'ER': error}

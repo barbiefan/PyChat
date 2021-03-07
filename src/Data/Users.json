@@ -1,0 +1,16 @@
+{
+    "some_id_1":
+    {
+        "Nickname": "Xxx_Pussy_Destroyer_xxX",
+        "Password": "ABCD_some_hashed_password_SHA256_probably_idk_DCBA",
+        "Email":    "yourmom@myhouse.fuck",
+        "Known_IPs": ["234.123.45.103", "234.123.45.105"]
+    },
+    "some_id_2":
+    {
+        "Nickname": "doing_your_mom.exe",
+        "Password": "VCXZ_some_hashed_password_SHA256_probably_idk_ZXCV",
+        "Email":    "yourdad@myhouse.piss",
+        "Known_IPs": ["56.33.145.103"]
+    }
+}
