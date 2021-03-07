@@ -6,7 +6,7 @@ test_string = '{"Sender": "Xxx_Pussy_destroyer_xxX", "DateTimeReceived": "08.03.
 
 class Packet():
     def __init__(self, string: str):
-        slovar = json.loads(test_string)
+        slovar = json.loads(string)
         self.Sender = slovar["Sender"]
         if slovar["DateTimeReceived"] == "":
             self.DateTime = str(time.time())
